@@ -2,6 +2,7 @@
 
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';
+@import './css/fontello.css';
 
 $page-header-height: 4rem;
 $form-group-header-height: 25px;
@@ -20,9 +21,13 @@ $form-group-header-height: 25px;
     height: calc(100% - #{$page-header-height});
 }
 
-.form-group label.form-label {
+.form-group .form-label {
     box-sizing: border-box;
     height: $form-group-header-height;
+}
+
+.form-label .icon-docs {
+    cursor: pointer;
 }
 
 // Import Bootstrap and its default variables
