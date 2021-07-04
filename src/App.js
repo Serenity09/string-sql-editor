@@ -5,9 +5,11 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 
 import './app.scss';
 
+import ContextEditor from './ContextEditor'
 import { stringInterpolate, cleanStringSQL, stringifyTemplate } from './StringExtensions'
 
 function App() {
@@ -92,9 +94,7 @@ function App() {
     if (activeEditor !== null && stringSQLRef.current === activeEditor) {
       const cleanedSQL = stringToTemplateSQL(stringSQL);
 
-      console.log("string SQL changed", stringSQL);
-      console.log("cleaned", cleanedSQL);
-      //TODO update template string editor based on string SQL
+      //update template string editor based on string SQL
       setTemplateSQL(cleanedSQL);
     }
   }, [activeEditor, rootContext.anonymousParameters, stringSQL]);
@@ -106,48 +106,97 @@ function App() {
     setActiveEditor(null);
   }
 
+  const [ isContextEditorVisible, setContextEditorVisible ] = useState(false);
+  const [ contextEditorText, setContextEditorText ] = useState("");
+
+  const closeContextEditor = () => setContextEditorVisible(false);
+  const openContextEditor = () => {
+    setContextEditorText(JSON.stringify(rootContext, null, 2));
+    setContextEditorVisible(true); 
+  }
+  
+  const onContextEditorSave = () => {
+    try {
+        const jsonContext = JSON.parse(contextEditorText);
+
+        if (jsonContext) {
+            setRootContext(jsonContext);
+        }
+    }
+    catch (err) {
+        
+    }
+
+    closeContextEditor();
+  }
+
   return (
-    <Form className="h-100">
-      <Container className="app-container h-100" fluid>
-        <Row>
-          <Col className="header-container">
-            <h1 className="mb-3">string-sql-editor</h1>
-            <div className="button-container">
-              <Button variant="primary">Context Editor</Button>
-            </div>
-          </Col>
-        </Row>
-        <Row className="editor-row">
-          <Col>
-            <Form.Group controlId="applicationStringSQLInput" className="h-100">
-              <Form.Label>IO Application String SQL</Form.Label>
-              <Form.Control ref={stringSQLRef} as="textarea" placeholder="Copy and paste application string SQL to and from here"
-                value={stringSQL}
-                onChange={onStringSQLChange}
-                onFocus={onFocus}
-                onBlur={onBlur} />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="applicationStringSQLInput" className="h-100">
-              <Form.Label>Template SQL Editor</Form.Label>
-              <Form.Control ref={templateSQLRef} as="textarea" placeholder="Edit a more minimal view of application string SQL here. &#10;This view allows for references to Java variables available in the runtime context"
-                value={templateSQL}
-                onChange={onTemplateSQLChange}
-                onFocus={onFocus}
-                onBlur={onBlur} />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="applicationStringSQLInput" className="h-100">
-              <Form.Label>SQL View</Form.Label>
-              <Form.Control as="textarea" placeholder="Valid SQL will be generated here. &#10;References to Java variables will be replaced using the selected context" readOnly
-                value={nativeSQL} />
-            </Form.Group>
-          </Col>
-        </Row>
-      </Container>
-    </Form>
+    <>
+      <Form className="h-100">
+        <Container className="app-container h-100" fluid>
+          <Row>
+            <Col className="header-container">
+              <h1 className="mb-3">string-sql-editor</h1>
+              <div className="button-container">
+                <Button onClick={openContextEditor} variant="primary">Context Editor</Button>
+              </div>
+            </Col>
+          </Row>
+          <Row className="editor-row">
+            <Col>
+              <Form.Group controlId="applicationStringSQLInput" className="h-100">
+                <Form.Label>IO Application String SQL</Form.Label>
+                <Form.Control ref={stringSQLRef} as="textarea" placeholder="Copy and paste application string SQL to and from here"
+                  value={stringSQL}
+                  onChange={onStringSQLChange}
+                  onFocus={onFocus}
+                  onBlur={onBlur} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="applicationStringSQLInput" className="h-100">
+                <Form.Label>Template SQL Editor</Form.Label>
+                <Form.Control ref={templateSQLRef} as="textarea" placeholder="Edit a more minimal view of application string SQL here. &#10;This view allows for references to Java variables available in the runtime context"
+                  value={templateSQL}
+                  onChange={onTemplateSQLChange}
+                  onFocus={onFocus}
+                  onBlur={onBlur} />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="applicationStringSQLInput" className="h-100">
+                <Form.Label>SQL View</Form.Label>
+                <Form.Control as="textarea" placeholder="Valid SQL will be generated here. &#10;References to Java variables will be replaced using the selected context" readOnly
+                  value={nativeSQL} />
+              </Form.Group>
+            </Col>
+          </Row>
+        </Container>
+      </Form>
+      <Modal 
+        show={isContextEditorVisible} 
+        onHide={closeContextEditor}
+        backdrop="static"
+        keyboard={false}
+        size="xl"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Context Editor</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ContextEditor
+            editorText={contextEditorText}
+            setEditorText={setContextEditorText}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeContextEditor}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={onContextEditorSave}>Save</Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 
