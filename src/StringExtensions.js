@@ -59,10 +59,14 @@ const stringifyTemplate = function (template) {
 
     //const rejoinedTemplateSQL = stringifiedTemplateSQL.join(" + \"\\n\"\n");
     const rejoinedTemplateSQL = stringifiedTemplateSQL.map((sqlLine, iLineNumber) => {
-        if (iLineNumber === 0 && !sqlLine)
-            return sqlLine + "\"\\n\"\n";
+        if (iLineNumber !== stringifiedTemplateSQL.length - 1) {
+            if (iLineNumber === 0 && !sqlLine)
+                return sqlLine + "\"\\n\"\n";
+            else
+                return sqlLine + " + \"\\n\"\n";
+        }
         else
-            return sqlLine + " + \"\\n\"\n";
+            return sqlLine;
     }).join("");
     
     return rejoinedTemplateSQL;
