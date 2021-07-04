@@ -1,0 +1,27 @@
+
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
+
+$page-header-height: 4rem;
+$form-group-header-height: 25px;
+
+
+.container-fluid.app-container > .row.editor-row {
+    height: calc(100% - #{$page-header-height});
+}
+
+.form-group label.form-label {
+    box-sizing: border-box;
+    height: $form-group-header-height;
+}
+
+// Import Bootstrap and its default variables
+.form-group textarea.form-control {
+    box-sizing: border-box;
+    height: calc(100% - #{$form-group-header-height} - 1.5rem);
+    width: 100%;
+    border-bottom: 1rem;
+
+    resize: none;
+}
