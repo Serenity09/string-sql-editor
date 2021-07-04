@@ -15,7 +15,6 @@ function App() {
 
   const [ templateSQL, setTemplateSQL ] = useState("");
   const templateSQLRef = useRef(null);
-  const [ anonymousReferences, setAnonymousReferences ] = useState([]);
 
   const [ nativeSQL, setNativeSQL ] = useState("");
 
@@ -51,82 +50,13 @@ function App() {
     setStringSQL(evt.target.value);
   }
 
-  // const START_DELIMITER = "${";
-  // const END_DELIMITER = "}";
-
-  // const ANONYMOUS_PARAMETER = "?";
-
   useEffect(() => {
-    // const stringifyTemplateSQL = function(value) {
-    //   const splitTemplateSQL = value.split("\n");
-    //   const stringifiedTemplateSQL = [];
-  
-    //   if (splitTemplateSQL.some((value) => {
-    //     return value;
-    //   })) {
-    //     splitTemplateSQL.forEach((templateSQLLine) => {  
-    //       const stringifiedTemplateSQLLine = [];
-
-    //       if (templateSQLLine) {
-    //         let iTemplateCharacterIndex = 0;
-    //         let startCopyIndex = 0;
-
-    //         const templateParts = [];
-    //         const template = templateSQLLine;
-
-    //         while (iTemplateCharacterIndex < template.length) {
-    //             const endDelimiterIndex = template.indexOf(END_DELIMITER, iTemplateCharacterIndex);
-
-    //             //check if the current template index is greater than the minimum number of characters to represent a template variable
-    //             if (iTemplateCharacterIndex >= template.length - START_DELIMITER.length - END_DELIMITER.length - 1) {
-    //                 templateParts.push("\"" + template.substring(startCopyIndex) + "\"");
-    //                 iTemplateCharacterIndex = template.length;
-    //             }
-    //             //otherwise check if the sequence at the current index matches the START_DELIMITER and that the END_DELIMITER occurs someplace after the current index
-    //             else if (template.substring(iTemplateCharacterIndex, iTemplateCharacterIndex + START_DELIMITER.length) === START_DELIMITER && endDelimiterIndex >= 0) {
-    //                 if (startCopyIndex !== iTemplateCharacterIndex) {
-    //                     templateParts.push("\"" + template.substring(startCopyIndex, iTemplateCharacterIndex) + "\"");
-
-    //                     startCopyIndex = endDelimiterIndex + END_DELIMITER.length;
-    //                 }
-
-    //                 templateParts.push(template.substring(iTemplateCharacterIndex + START_DELIMITER.length, endDelimiterIndex));
-
-    //                 iTemplateCharacterIndex = endDelimiterIndex + END_DELIMITER.length;
-    //             }
-    //             else
-    //             //otherwise move on to the next character
-    //                 iTemplateCharacterIndex++;
-    //         }
-
-    //         let strTemplateSQL;
-    //         if (templateParts.length > 0)
-    //           strTemplateSQL = templateParts.join(" + ");
-    //         else
-    //           strTemplateSQL = "";
-                        
-    //         stringifiedTemplateSQLLine.push(strTemplateSQL);
-    //       }
-  
-    //       if (stringifiedTemplateSQLLine.length > 0) {
-    //         const joinedStrTemplateSQL = stringifiedTemplateSQLLine.join(" + ");
-            
-    //         stringifiedTemplateSQL.push(joinedStrTemplateSQL);
-    //       }
-    //     });
-    //   }
-  
-    //   return stringifiedTemplateSQL.join(" + \"\\n\" +\n");
-    // }
-    
     if (activeEditor !== null && templateSQLRef.current === activeEditor) {
       const joinedStringSQL = stringifyTemplate(templateSQL);
       setStringSQL(joinedStringSQL);
     }
 
     const nativeSQL = stringInterpolate(templateSQL, rootContext);
-    // const nativeSQL2 = fillTemplate(templateSQL, rootContext);
-    // console.log("nativeSQL2", nativeSQL2);
     setNativeSQL(nativeSQL);
   }, [activeEditor, rootContext, templateSQL]);
 
