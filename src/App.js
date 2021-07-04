@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import './app.scss';
 
@@ -108,7 +109,14 @@ function App() {
   return (
     <Form className="h-100">
       <Container className="app-container h-100" fluid>
-        <h1 className="mb-3">string-sql-editor</h1>
+        <Row>
+          <Col className="header-container">
+            <h1 className="mb-3">string-sql-editor</h1>
+            <div className="button-container">
+              <Button variant="primary">Context Editor</Button>
+            </div>
+          </Col>
+        </Row>
         <Row className="editor-row">
           <Col>
             <Form.Group controlId="applicationStringSQLInput" className="h-100">

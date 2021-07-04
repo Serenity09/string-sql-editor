@@ -6,6 +6,15 @@
 $page-header-height: 4rem;
 $form-group-header-height: 25px;
 
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.header-container h1, .header-container .button-container {
+    display: inline-block;
+}
 
 .container-fluid.app-container > .row.editor-row {
     height: calc(100% - #{$page-header-height});
