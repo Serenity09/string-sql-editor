@@ -8,9 +8,7 @@ function Editor(props) {
     }
 
     useEffect(() => {
-        //console.log(props.controlRef);
         if (props.controlRef) {
-            //console.log(props.controlRef.current.scrollTop);
             props.controlRef.current.scrollTop = props.scrollPosition;
         }
     }, [props.controlRef, props.scrollPosition]);
