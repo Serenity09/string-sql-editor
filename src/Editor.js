@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Form from 'react-bootstrap/Form'
 
 function Editor(props) {
@@ -5,6 +6,14 @@ function Editor(props) {
         if (props.value)
             navigator.clipboard.writeText(props.value);
     }
+
+    useEffect(() => {
+        //console.log(props.controlRef);
+        if (props.controlRef) {
+            //console.log(props.controlRef.current.scrollTop);
+            props.controlRef.current.scrollTop = props.scrollPosition;
+        }
+    }, [props.controlRef, props.scrollPosition]);
 
     return (
         <Form.Group controlId={props.controlId} className="h-100">
@@ -14,7 +23,9 @@ function Editor(props) {
                 onChange={props.onChange}
                 onFocus={props.onFocus}
                 onBlur={props.onBlur}
-                disabled={props.disabled} />
+                disabled={props.disabled}
+                onScroll={props.onScroll}
+            />
         </Form.Group>
     );
 }

@@ -21,6 +21,7 @@ function App() {
   const templateSQLRef = useRef(null);
 
   const [ nativeSQL, setNativeSQL ] = useState("");
+  const nativeSQLRef = useRef(null);
 
   const [ activeEditor, setActiveEditor ] = useState(null);
 
@@ -131,6 +132,12 @@ function App() {
     closeContextEditor();
   }
 
+  const [ scrollPosition, setScrollPosition ] = useState(0);
+  const onScroll = (evt) => {
+    if (evt.target)
+      setScrollPosition(evt.target.scrollTop);
+  }
+
   return (
     <>
       <Form className="h-100">
@@ -153,6 +160,8 @@ function App() {
                 onChange={onStringSQLChange}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                scrollPosition={scrollPosition}
+                onScroll={onScroll}
               />
             </Col>
             <Col>
@@ -164,14 +173,19 @@ function App() {
                 onChange={onTemplateSQLChange}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                scrollPosition={scrollPosition}
+                onScroll={onScroll}
               />
             </Col>
             <Col>
               <Editor controlId="applicationSQLOutput"
                 label="SQL View"
+                controlRef={nativeSQLRef}
                 placeholder="Valid SQL will be generated here. &#10;References to Java variables will be replaced using the selected context"
                 value={nativeSQL}
                 disabled="disabled"
+                scrollPosition={scrollPosition}
+                onScroll={onScroll}
               />
             </Col>
           </Row>
